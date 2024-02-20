@@ -158,11 +158,12 @@ void GameInit() {
 	for (int i = 0; i < NUM_ASTEROID; i++) {
 		int rand_s = rand();
 
-		gameObjInstCreate(TYPE_EXP, glm::vec3(rand() % window.getSize().x, rand() % (window.getSize().y - 300), 0.0f),
+		gameObjInstCreate(TYPE_EXP
+			, glm::vec3(rand() % window.getSize().x, rand() % (window.getSize().y - 300), 0.0f),
 			glm::vec3(ASTEROID_SPEED * ((2 * (float)rand() / (float)(RAND_MAX)) - 1), ASTEROID_SPEED * ((2 * (float)rand() / (float)(RAND_MAX)) - 1), 0.0f),
 			//glm::vec3(rand() % 50 + 20, rand() % 50 + 20, 1.0f), (2 * PI * (float)rand() / (float)(RAND_MAX)));
 			
-			glm::vec3((rand_s % 50 + 20) / 72.0f, (rand_s % 50 + 20)/70.0f, 1.0f), 0.0f, false, 0, true, 3, rand() % 3, 50);
+			glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, false, 0, true, 3, rand() % 3, 50);
 
 
 	}
