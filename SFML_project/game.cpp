@@ -1,5 +1,5 @@
 #include "game.h"
-
+#include "GUI.h"
 
 // -------------------------------------------
 // Level variable, static - visible only in this file
@@ -8,6 +8,7 @@
 static sf::Sprite	*sSpriteArray;							// Store all unique sprite in your game
 static sf::Texture	*sTexArray;								// Corresponding texture of the sprite
 static GameObj		sGameObjInstArray[GAME_OBJ_INST_MAX];	// Store all game object instance
+static GUI			sUIInstArray[GAME_OBJ_INST_MAX];
 static int			sNumGameObj;
 static int			sNumSprite;
 static int			sNumTex;
@@ -163,7 +164,7 @@ void GameInit() {
 			glm::vec3(ASTEROID_SPEED * ((2 * (float)rand() / (float)(RAND_MAX)) - 1), ASTEROID_SPEED * ((2 * (float)rand() / (float)(RAND_MAX)) - 1), 0.0f),
 			//glm::vec3(rand() % 50 + 20, rand() % 50 + 20, 1.0f), (2 * PI * (float)rand() / (float)(RAND_MAX)));
 			
-			glm::vec3(1.0f, 1.0f, 1.0f), 0.0f, false, 0, true, 3, rand() % 3, 50);
+			glm::vec3(0.8f, 0.8f, 0.8f), 0.0f, false, 0, true, 3, rand() % 3, 50);
 
 
 	}
@@ -174,20 +175,28 @@ void GameInit() {
 			if (pInst->currFrame == 0) {
 				
 				pInst->score = 10;
-				pInst->lifepoint = 2;
+				pInst->maxlifepoint = 2;
+				pInst->lifepoint = pInst->maxlifepoint;
 				std::cout << "obj : " << i << " lifepoint = " << pInst->lifepoint << std::endl;
 			}else if (pInst->currFrame == 1) {
 				pInst->score = 50;
-				pInst->lifepoint = 4;
+				pInst->maxlifepoint = 4;
+				pInst->lifepoint = pInst->maxlifepoint;
 				std::cout << "obj : " << i << " lifepoint = " << pInst->lifepoint << std::endl;
 			}else if (pInst->currFrame == 2) {
 				pInst->score = 100;
-				pInst->lifepoint = 10;
+				pInst->maxlifepoint = 10;
+				pInst->lifepoint = pInst->maxlifepoint;
 				std::cout << "obj : " << i << " lifepoint = " << pInst->lifepoint << std::endl;
 			}
+			GUI* gui = sUIInstArray + i;
+			gui->ObjectSetup(pInst);
+			
+
 		}
 
 	}
+
 
 	
 	// set view
@@ -295,6 +304,19 @@ void GameUpdate(double dt, long frame, int &state) {
 
 		}
 	}
+	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+		GameObj* pInst = sGameObjInstArray + i;
+
+		// skip inactive object
+		if (pInst->flag == FLAG_INACTIVE)
+			continue;
+
+		// for Ship: it will experice a slow down due to friction
+		// for Asteroid, bullet: constant velocity
+		if (pInst->type == TYPE_EXP) {
+			// pInst->gui->Update(dt);
+		}
+	}
 
 	//----------------------------------------------------
 	// Update animation for animated object every n frame
@@ -381,7 +403,15 @@ void GameUpdate(double dt, long frame, int &state) {
 		}
 	}
 
+	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+		GUI* pInst = sUIInstArray + i;
+		if (pInst->GetGameObj() == NULL) {
+			continue;
+		}
+		pInst->Update(dt);
 
+
+	}
 	double fps = 1.0 / dt;
 	//printf("Level1: Update @> %f fps, frame>%ld\n", fps, frame);
 	//printf("Score> %i\n", sScore);
@@ -419,7 +449,19 @@ void GameDraw(double dt) {
 		
 		
 	}
+	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+		GUI* pInst = sUIInstArray + i;
+		if (pInst->flag == FLAG_INACTIVE) {
+			continue;
+		}
+		if (pInst->GetPercent() <= 0) {
+			pInst->flag = FLAG_INACTIVE;
+			continue;
+		}
+		pInst->render();
 
+
+	}
 
 	// swap framebuffer
 	window.display();

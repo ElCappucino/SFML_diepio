@@ -88,7 +88,6 @@ int main()
 
             GameUpdate(frametime, framenumber, state);
             GameDraw(frametime);
-
             // Check return state from Update()
             if (state == 2) {
                 gGameStateNext = RESTART;

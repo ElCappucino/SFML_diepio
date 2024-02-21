@@ -30,6 +30,7 @@ extern sf::RenderWindow window;
 #define MAX_SHIP_VELOCITY			200.0f
 
 
+
 enum GAMEOBJ_TYPE
 {
 	// list of game object types
@@ -68,9 +69,9 @@ struct GameObj
 	int				frameSizeX;			// frame size, assume single row sprite sheet
 	int				currOffset;
 	int				score;
-	int				lifepoint;
+	float			lifepoint;
+	float			maxlifepoint;
 };
-
 
 
 // functions to create/destroy a game object instance
