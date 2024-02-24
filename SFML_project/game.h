@@ -25,7 +25,7 @@ extern sf::RenderWindow window;
 #define SHIP_ACC_BWD				180.0f			// ship backward acceleration (in m/s^2)
 #define SHIP_ROT_SPEED				(2.0f * PI)		// ship rotation speed (degree/second)
 #define HOMING_MISSILE_ROT_SPEED	(PI / 2.0f)		// homing missile rotation speed (degree/second)
-#define BULLET_SPEED				-300.0f			
+#define BULLET_SPEED				-200.0f			
 #define ASTEROID_SPEED				200.0f	
 #define MAX_SHIP_VELOCITY			200.0f
 

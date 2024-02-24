@@ -1,45 +1,35 @@
-﻿  GUI.cpp
-  game.cpp
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(115,104): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+﻿  game.cpp
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(116,104): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(115,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(116,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(121,104): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(122,104): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(121,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(122,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(203,57): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(207,57): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(203,35): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(207,35): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(204,64): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=unsigned int
-          ]
-          and
-          [
-              T=float
-          ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(204,44): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(208,64): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=unsigned int
@@ -48,9 +38,7 @@ C:\bookrepo\SFML_diepio\SFML_project\game.cpp(204,44): warning C4244: 'argument'
           [
               T=float
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(242,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(245,42): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(349,41): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(208,44): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=unsigned int
@@ -59,7 +47,9 @@ C:\bookrepo\SFML_diepio\SFML_project\game.cpp(349,41): warning C4244: '=': conve
           [
               T=float
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(355,41): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(246,42): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(249,42): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(403,41): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=unsigned int
@@ -68,6 +58,14 @@ C:\bookrepo\SFML_diepio\SFML_project\game.cpp(355,41): warning C4244: '=': conve
           [
               T=float
           ]
-C:\bookrepo\SFML_diepio\SFML_project\game.cpp(411,17): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-  Generating Code...
-  SFML_project.vcxproj -> C:\bookrepo\SFML_diepio\Debug\SFML_project.exe
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(409,41): warning C4244: '=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\SFML_project\game.cpp(462,17): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+  SFML_project.vcxproj -> C:\Users\Admin\Desktop\Year1_Sem2_University\GameImplement\SFML_pc 1\SFML_pc\Debug\SFML_project.exe

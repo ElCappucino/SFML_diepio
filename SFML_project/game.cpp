@@ -1,6 +1,6 @@
 #include "game.h"
 #include "GUI.h"
-
+#include "Button.h"
 // -------------------------------------------
 // Level variable, static - visible only in this file
 // -------------------------------------------
@@ -9,6 +9,7 @@ static sf::Sprite	*sSpriteArray;							// Store all unique sprite in your game
 static sf::Texture	*sTexArray;								// Corresponding texture of the sprite
 static GameObj		sGameObjInstArray[GAME_OBJ_INST_MAX];	// Store all game object instance
 static GUI			sUIInstArray[GAME_OBJ_INST_MAX];
+static Button		sButtonInstArray[GAME_OBJ_INST_MAX];
 static int			sNumGameObj;
 static int			sNumSprite;
 static int			sNumTex;
@@ -151,7 +152,7 @@ void GameInit() {
 	//	- the velocity.z should be set to 0
 	sPlayer = gameObjInstCreate(TYPE_TANK, glm::vec3(window.getSize().x / 2, window.getSize().y / 1.2, 0.0f),
 		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(50.0f/100, 50.0f/ 100, 1.0f),
-		0.0f, false, 0, false, 5, 1 ,200);
+		0.0f, false, 0, false, 5, 0 ,200);
 
 	// Create all asteroid instance with random pos and velocity
 	//	- int a = rand() % 30 + 20;							// a is in the range 20-50
@@ -173,31 +174,34 @@ void GameInit() {
 
 		if (pInst->type == TYPE_EXP) {
 			if (pInst->currFrame == 0) {
-				
+
 				pInst->score = 10;
 				pInst->maxlifepoint = 2;
 				pInst->lifepoint = pInst->maxlifepoint;
-				std::cout << "obj : " << i << " lifepoint = " << pInst->lifepoint << std::endl;
-			}else if (pInst->currFrame == 1) {
+			}
+			else if (pInst->currFrame == 1) {
 				pInst->score = 50;
 				pInst->maxlifepoint = 4;
 				pInst->lifepoint = pInst->maxlifepoint;
-				std::cout << "obj : " << i << " lifepoint = " << pInst->lifepoint << std::endl;
-			}else if (pInst->currFrame == 2) {
+			}
+			else if (pInst->currFrame == 2) {
 				pInst->score = 100;
 				pInst->maxlifepoint = 10;
 				pInst->lifepoint = pInst->maxlifepoint;
-				std::cout << "obj : " << i << " lifepoint = " << pInst->lifepoint << std::endl;
 			}
 			GUI* gui = sUIInstArray + i;
 			gui->ObjectSetup(pInst);
-			
 
 		}
-
 	}
 
-
+	//Button
+	for (int i = 0; i < 5; i++) {
+		Button* button = new Button("text", { 50, 50 }, 200, sf::Color::Black, sf::Color::Black);
+		button->setPosition({ 10.0f, 50.0f + (10.0f * (float)i) + (50.0f * (float)i)});
+		sButtonInstArray[i] = *button;
+	}
+	
 	
 	// set view
 	view.setCenter(window.getSize().x/2, window.getSize().y/2);
@@ -250,12 +254,53 @@ void GameUpdate(double dt, long frame, int &state) {
 
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
-		if (frame % 5 == 0) {
-			glm::vec3 bulletVec = glm::vec3(BULLET_SPEED * glm::cos(sPlayer->orientation + PI / 2.0f),
-											BULLET_SPEED * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
-			gameObjInstCreate(TYPE_BULLET, sPlayer->position, bulletVec, glm::vec3(0.8f, 0.8f, 1.0f),
-								sPlayer->orientation, false, 0, false, 0, 0, 0);
+		if (sPlayer->currFrame == 0) {
+			if (frame % 10 == 0) {
+				glm::vec3 bulletVec = glm::vec3(BULLET_SPEED * glm::cos(sPlayer->orientation + PI / 2.0f),
+					BULLET_SPEED * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+				gameObjInstCreate(TYPE_BULLET, sPlayer->position, bulletVec, glm::vec3(0.8f, 0.8f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+			}
 		}
+		else if (sPlayer->currFrame == 1) {
+			if (frame % 20 == 0) {
+				glm::vec3 bulletVec = glm::vec3((BULLET_SPEED - 300.0f) * glm::cos(sPlayer->orientation + PI / 2.0f),
+					(BULLET_SPEED - 300.0f) * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+				gameObjInstCreate(TYPE_BULLET, sPlayer->position, bulletVec, glm::vec3(0.8f, 0.8f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+			}
+		}
+		else if (sPlayer->currFrame == 2) {
+			if (frame % 10 == 0) {
+				glm::vec3 bulletVec = glm::vec3((BULLET_SPEED - 300.0f) * glm::cos(sPlayer->orientation + PI / 2.0f),
+					(BULLET_SPEED - 300.0f) * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+				gameObjInstCreate(TYPE_BULLET, glm::vec3(sPlayer->position.x - 20.0f, sPlayer->position.y, 0.0f), bulletVec, glm::vec3(0.8f, 0.8f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+				gameObjInstCreate(TYPE_BULLET, glm::vec3(sPlayer->position.x + 20.0f, sPlayer->position.y, 0.0f), bulletVec, glm::vec3(0.8f, 0.8f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+			}
+		}
+		else if (sPlayer->currFrame == 3) {
+			if (frame % 15 == 0) {
+				glm::vec3 bulletVec1 = glm::vec3((BULLET_SPEED - 300.0f) * glm::cos(sPlayer->orientation + PI / 2.0f),
+					(BULLET_SPEED - 300.0f) * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+				gameObjInstCreate(TYPE_BULLET, sPlayer->position, bulletVec1, glm::vec3(0.8f, 0.8f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+				glm::vec3 bulletVec2 = glm::vec3((-BULLET_SPEED + 100.0f) * glm::cos(sPlayer->orientation + PI / 2.0f),
+					(-BULLET_SPEED + 100.0f) * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+				gameObjInstCreate(TYPE_BULLET, sPlayer->position, bulletVec2, glm::vec3(0.8f, 0.8f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+			}
+		}
+		else if (sPlayer->currFrame == 4) {
+			if (frame % 5 == 0) {
+				glm::vec3 bulletVec = glm::vec3(BULLET_SPEED * glm::cos(sPlayer->orientation + PI / 2.0f) - 60.0f + (float)(rand() % 120),
+					BULLET_SPEED * glm::sin(sPlayer->orientation + PI / 2.0f) - 60.0f + (float)(rand() % 120), 0);
+				gameObjInstCreate(TYPE_BULLET, sPlayer->position - 5.0f + (float)(rand() % 10), bulletVec, glm::vec3(0.6f, 0.6f, 1.0f),
+					sPlayer->orientation, false, 0, false, 0, 0, 0);
+			}
+		}
+		
 	}
 	//zoom-UO
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
@@ -264,7 +309,16 @@ void GameUpdate(double dt, long frame, int &state) {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
 		view.zoom(1 / 0.99f);
 	}
-
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+		for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+			Button* pInst = sButtonInstArray + i;
+			if (pInst->isMouseOver(window)) {
+				sPlayer->currFrame = i;
+				sPlayer->currOffset = sPlayer->currFrame * sPlayer->frameSizeX;
+				std::cout << sPlayer->currFrame;
+			}
+		}
+	}
 	//-----------------------------------------
 	// Decrease object lifespan
 	//-----------------------------------------
@@ -390,10 +444,7 @@ void GameUpdate(double dt, long frame, int &state) {
 						pInst2->position.y > pInst1->position.y - pInst1->frameSizeX * pInst1->scale.y) {
 						pInst1->lifepoint--;
 						pInst2->flag = false;
-						std::cout << "pInst1 lifepoint = " << pInst1->lifepoint << std::endl;
 						if (pInst1->lifepoint <= 0) {
-
-							std::cout << "pInst1 lifepoint = " << pInst1->lifepoint << std::endl;
 							pInst1->flag = false;
 						}
 						
@@ -462,7 +513,17 @@ void GameDraw(double dt) {
 
 
 	}
-
+	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+		Button* pInst = sButtonInstArray + i;
+		pInst->drawTo(window);
+		if (pInst->isMouseOver(window)) {
+			pInst->setBackColor(sf::Color::Black);
+		}
+		else {
+			pInst->setBackColor(sf::Color::Blue);
+		}
+	}
+	
 	// swap framebuffer
 	window.display();
 

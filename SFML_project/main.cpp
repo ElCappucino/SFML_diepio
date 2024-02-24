@@ -84,7 +84,7 @@ int main()
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) || !window.isOpen()) {
                 gGameStateNext = QUIT;
             }
-
+            
 
             GameUpdate(frametime, framenumber, state);
             GameDraw(frametime);
