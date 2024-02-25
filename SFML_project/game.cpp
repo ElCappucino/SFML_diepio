@@ -63,7 +63,27 @@ GameObj* gameObjInstCreate(int type, glm::vec3 pos, glm::vec3 vel, glm::vec3 sca
 					}
 				}
 			}
+			if (pInst->type == TYPE_EXP) {
+				if (pInst->currFrame == 0) {
 
+					pInst->score = 10;
+					pInst->maxlifepoint = 2;
+					pInst->lifepoint = pInst->maxlifepoint;
+				}
+				else if (pInst->currFrame == 1) {
+					pInst->score = 50;
+					pInst->maxlifepoint = 4;
+					pInst->lifepoint = pInst->maxlifepoint;
+				}
+				else if (pInst->currFrame == 2) {
+					pInst->score = 100;
+					pInst->maxlifepoint = 10;
+					pInst->lifepoint = pInst->maxlifepoint;
+				}
+				GUI* gui = sUIInstArray + i;
+				gui->ObjectSetup(pInst);
+
+			}
 			sNumGameObj++;
 			return pInst;
 		}
@@ -220,6 +240,15 @@ void GameInit() {
 
 void GameUpdate(double dt, long frame, int &state) {
 
+	sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+
+	// Calculate the angle between the player and the mouse
+	float dx = mousePosition.x - sPlayer->position.x;
+	float dy = mousePosition.y - sPlayer->position.y;
+	float angle = (atan2(dy, dx) * 180 / 3.1412) + 90; // Convert radians to degrees
+
+	sPlayer->orientation = angle * 3.1412 / 180;
+	std::cout << sPlayer->orientation << std::endl;
 	//-----------------------------------------
 	// Get user input
 	//-----------------------------------------
@@ -229,31 +258,46 @@ void GameUpdate(double dt, long frame, int &state) {
 	//		- has velocity cap
 	//	- AD turn the ship
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
-		glm::vec3 acc = glm::vec3(SHIP_ACC_FWD * glm::cos(sPlayer->orientation + PI/2.0f),
+		/*glm::vec3 acc = glm::vec3(SHIP_ACC_FWD * glm::cos(sPlayer->orientation + PI/2.0f),
 									SHIP_ACC_FWD * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+		sPlayer->velocity += acc * glm::vec3(dt, dt, 0.0f);*/
+
+		glm::vec3 acc = glm::vec3(0, SHIP_ACC_FWD, 0);
 		sPlayer->velocity += acc * glm::vec3(dt, dt, 0.0f);
+
 		if (glm::length(sPlayer->velocity) > MAX_SHIP_VELOCITY) {
 			//++
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-		glm::vec3 acc = glm::vec3(SHIP_ACC_FWD * glm::cos(sPlayer->orientation + PI / 2.0f),
-			SHIP_ACC_FWD * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
-		sPlayer->velocity -= acc * glm::vec3(dt, dt, 0.0f);
 
+		/*glm::vec3 acc = glm::vec3(SHIP_ACC_FWD * glm::cos(sPlayer->orientation + PI / 2.0f),
+			SHIP_ACC_FWD * glm::sin(sPlayer->orientation + PI / 2.0f), 0);
+		sPlayer->velocity -= acc * glm::vec3(dt, dt, 0.0f);*/
+		glm::vec3 acc = glm::vec3(0, SHIP_ACC_FWD, 0);
+		sPlayer->velocity -= acc * glm::vec3(dt, dt, 0.0f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-		sPlayer->orientation += SHIP_ROT_SPEED * dt;
+
+		glm::vec3 acc = glm::vec3(SHIP_ACC_FWD, 0, 0);
+		sPlayer->velocity -= acc * glm::vec3(dt, dt, 0.0f);
+
+		// sPlayer->orientation += SHIP_ROT_SPEED * dt;
+
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-		sPlayer->orientation -= SHIP_ROT_SPEED * dt;
+
+		glm::vec3 acc = glm::vec3(SHIP_ACC_FWD, 0, 0);
+		sPlayer->velocity += acc * glm::vec3(dt, dt, 0.0f);
+		// sPlayer->orientation -= SHIP_ROT_SPEED * dt;
+
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K)) {
-		
+
 		//++
 
 	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J)) {
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 		if (sPlayer->currFrame == 0) {
 			if (frame % 10 == 0) {
 				glm::vec3 bulletVec = glm::vec3(BULLET_SPEED * glm::cos(sPlayer->orientation + PI / 2.0f),
@@ -304,12 +348,17 @@ void GameUpdate(double dt, long frame, int &state) {
 	}
 	//zoom-UO
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
+
 		view.zoom(0.99f); 
+
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::O)) {
+
 		view.zoom(1 / 0.99f);
+
 	}
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
 		for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
 			Button* pInst = sButtonInstArray + i;
 			if (pInst->isMouseOver(window)) {
@@ -318,6 +367,7 @@ void GameUpdate(double dt, long frame, int &state) {
 				std::cout << sPlayer->currFrame;
 			}
 		}
+
 	}
 	//-----------------------------------------
 	// Decrease object lifespan
@@ -353,12 +403,11 @@ void GameUpdate(double dt, long frame, int &state) {
 			//++
 		}
 		else if (pInst->type == TYPE_MISSILE) {
-			
 			//++
-
 		}
 	}
 	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+
 		GameObj* pInst = sGameObjInstArray + i;
 
 		// skip inactive object
@@ -370,6 +419,7 @@ void GameUpdate(double dt, long frame, int &state) {
 		if (pInst->type == TYPE_EXP) {
 			// pInst->gui->Update(dt);
 		}
+
 	}
 
 	//----------------------------------------------------
@@ -379,6 +429,19 @@ void GameUpdate(double dt, long frame, int &state) {
 	if (frame % 3 == 0) {
 
 		//++ 
+
+	}
+
+	if (frame % 120 == 0) {
+
+		int rand_s = rand();
+
+		gameObjInstCreate(TYPE_EXP
+			, glm::vec3(rand() % window.getSize().x, rand() % (window.getSize().y - 300), 0.0f),
+			glm::vec3(ASTEROID_SPEED* ((2 * (float)rand() / (float)(RAND_MAX)) - 1), ASTEROID_SPEED* ((2 * (float)rand() / (float)(RAND_MAX)) - 1), 0.0f),
+			//glm::vec3(rand() % 50 + 20, rand() % 50 + 20, 1.0f), (2 * PI * (float)rand() / (float)(RAND_MAX)));
+
+			glm::vec3(0.8f, 0.8f, 0.8f), 0.0f, false, 0, true, 3, rand() % 3, 50);
 
 	}
 
@@ -447,7 +510,6 @@ void GameUpdate(double dt, long frame, int &state) {
 						if (pInst1->lifepoint <= 0) {
 							pInst1->flag = false;
 						}
-						
 					}
 				}
 			}
@@ -455,12 +517,12 @@ void GameUpdate(double dt, long frame, int &state) {
 	}
 
 	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+
 		GUI* pInst = sUIInstArray + i;
 		if (pInst->GetGameObj() == NULL) {
 			continue;
 		}
 		pInst->Update(dt);
-
 
 	}
 	double fps = 1.0 / dt;
@@ -480,6 +542,7 @@ void GameDraw(double dt) {
 
 	// draw all game object instance in the sGameObjInstArray
 	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+
 		GameObj* pInst = sGameObjInstArray + i;
 
 		// skip inactive object
@@ -498,9 +561,9 @@ void GameDraw(double dt) {
 		
 		window.draw(sSpriteArray[pInst->type]);
 		
-		
 	}
 	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+
 		GUI* pInst = sUIInstArray + i;
 		if (pInst->flag == FLAG_INACTIVE) {
 			continue;
@@ -511,9 +574,9 @@ void GameDraw(double dt) {
 		}
 		pInst->render();
 
-
 	}
 	for (int i = 0; i < GAME_OBJ_INST_MAX; i++) {
+
 		Button* pInst = sButtonInstArray + i;
 		pInst->drawTo(window);
 		if (pInst->isMouseOver(window)) {
@@ -522,6 +585,7 @@ void GameDraw(double dt) {
 		else {
 			pInst->setBackColor(sf::Color::Blue);
 		}
+
 	}
 	
 	// swap framebuffer
