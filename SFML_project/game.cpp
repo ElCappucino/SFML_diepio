@@ -17,7 +17,10 @@ static int			sNumTex;
 static GameObj*		sPlayer;										// Pointer to the Player game object instance
 
 static int			sPlayerLives;									// The number of lives left
-static int			sScore;
+static int			sScore = 0;
+
+sf::Font sarabun;
+sf::Text scoreText;
 
 // View
 sf::View view;
@@ -222,6 +225,18 @@ void GameInit() {
 		sButtonInstArray[i] = *button;
 	}
 	
+	// sarabun.loadFromFile("asset\\THSarabunNew.ttf");
+	if (!sarabun.loadFromFile("asset\\THSarabunNew.ttf")) {
+		// Error handling if font loading fails
+		std::cerr << "Failed to load font file!" << std::endl;
+	}
+
+	scoreText.setFont(sarabun); // Set the font
+	scoreText.setString("Hello, SFML!"); // Set the string to display
+	scoreText.setCharacterSize(24); // Set the character size
+	scoreText.setFillColor(sf::Color::Black); // Set the fill color
+	scoreText.setPosition(800, 900); // Set the position
+	scoreText.setStyle(sf::Text::Bold);
 	
 	// set view
 	view.setCenter(window.getSize().x/2, window.getSize().y/2);
@@ -460,7 +475,7 @@ void GameUpdate(double dt, long frame, int &state) {
 
 		if ((pInst->type == TYPE_TANK) || (pInst->type == TYPE_EXP)) {
 			if (pInst->position.x > (window.getSize().x + (pInst->frameSizeX*pInst->scale.x)/2)) {
-				pInst->position.x = -1* (pInst->frameSizeX * pInst->scale.x)/2;
+				pInst->position.x = -1 * (pInst->frameSizeX * pInst->scale.x)/2;
 			}
 			if (pInst->position.x < -1 * (pInst->frameSizeX * pInst->scale.x)/2) {
 				pInst->position.x = window.getSize().x;
@@ -508,6 +523,7 @@ void GameUpdate(double dt, long frame, int &state) {
 						pInst1->lifepoint--;
 						pInst2->flag = false;
 						if (pInst1->lifepoint <= 0) {
+							sScore += pInst1->score;
 							pInst1->flag = false;
 						}
 					}
@@ -525,11 +541,26 @@ void GameUpdate(double dt, long frame, int &state) {
 		pInst->Update(dt);
 
 	}
+
+	if (sScore >= 1500) {
+		sPlayer->currFrame = 4;
+	}else if (sScore >= 800) {
+		sPlayer->currFrame = 3;
+	}
+	else if (sScore >= 600) {
+		sPlayer->currFrame = 2;
+	}
+	else if (sScore >= 400) {
+		sPlayer->currFrame = 1;
+	}
+	sPlayer->currOffset = sPlayer->currFrame * sPlayer->frameSizeX;
 	double fps = 1.0 / dt;
+
+
 	//printf("Level1: Update @> %f fps, frame>%ld\n", fps, frame);
 	//printf("Score> %i\n", sScore);
 	//printf("num obj> %i\n", sNumGameObj);
-
+	
 }
 
 
@@ -587,7 +618,8 @@ void GameDraw(double dt) {
 		}
 
 	}
-	
+	scoreText.setString("Score: " + std::to_string(sScore));
+	window.draw(scoreText);
 	// swap framebuffer
 	window.display();
 
